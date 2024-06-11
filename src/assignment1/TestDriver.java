@@ -9,14 +9,28 @@ import java.time.Duration;
 import shapes.*;
 //import assignment1.Utility;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class TestDriver {
 
 	public static void main(String[] args) {
+		
 
-		String fileName = "testData/polyfor1.txt";
-        String sortType = "v";
-        String sortAlgorithm = "q";
+		// java -jar sort.jar -ftestData/polyfor1.txt -tv -sb
+		String fileName = null;
+        String sortType = null;
+        String sortAlgorithm = null;
+        
+        for (String arg : args) {
+        	if(arg.substring(0, 2).equals("-f") || arg.substring(0, 2).equals("-F")) {
+        		fileName = arg.substring(2);
+        	}else if(arg.substring(0, 2).equals("-t") || arg.substring(0, 2).equals("-T")) {
+        		sortType = arg.substring(2);
+        	}else if(arg.substring(0, 2).equals("-s") || arg.substring(0, 2).equals("-S")) {
+        		sortAlgorithm = arg.substring(2);
+        	}
+        }        
 
 		// Array of shapes
         ThreeDShape[] shapes;
@@ -67,39 +81,68 @@ public class TestDriver {
             return;
         }
       
-        
-        LocalTime startTime = LocalTime.now();
-        System.out.println("startTime time: " + startTime);
-        
-        // Sorting        
-        Comparator<ThreeDShape> comparator = ShapeComparator.getComparator(sortType);
-        Utility.sort(sortAlgorithm, shapes, comparator);
-        
-        LocalTime endTime = LocalTime.now();
-        System.out.println("endTime time: " + endTime);
+		// Set up logging to a file
+        int dotIndex = fileName.lastIndexOf('.');
+        int slashIndex = fileName.lastIndexOf('/');
 
-        Duration duration = Duration.between(startTime, endTime);
+        String outputFileName = "output/" + fileName.substring(slashIndex+1, dotIndex) + sortType + sortAlgorithm + ".txt";
+        System.out.println("outputFileName: "+ outputFileName);
 
-     // Convert duration to milliseconds
-     long millis = duration.toMillis();
+        // Output the result to a file
+        try (PrintStream fileOut = new PrintStream(outputFileName)){
+            System.setOut(fileOut);
+            
+            System.out.println("------------------------");
+            LocalTime startTime = LocalTime.now();
+            System.out.println("Start Sorting: " + startTime);
+            
+            // Sorting        
+            System.out.println("Type: " + sortType);
+            System.out.println("Algorithm: " + sortAlgorithm);
+            Comparator<ThreeDShape> comparator = ShapeComparator.getComparator(sortType);
+            Utility.sort(sortAlgorithm, shapes, comparator);
+            
+            LocalTime endTime = LocalTime.now();
+            System.out.println("End Sorting: " + endTime);
 
-     System.out.println("Total time (milliseconds): " + millis);
-     
-     // The program should also print the first sorted value and last sorted value, 
-     // and every thousandth value in between.
-     // First value
-     System.out.println("First sorted value: " + shapes[0].getVolume());  
-     
-     System.out.println("Last sorted value: " + shapes[shapes.length-1].getVolume());  
-//
-//        for (ThreeDShape shape : shapes) {
-//        	if(shape == null) {
-//        		System.out.println(shape);
-//        	}
-//            System.out.println(shape.getVolume());
-//        }
-        
+            Duration duration = Duration.between(startTime, endTime);
+
+            // Convert duration to milliseconds
+            long millis = duration.toMillis();
+            System.out.println("Sorting time (milliseconds): " + millis);
+         
+            System.out.println("------------------------");
+
+            // The program should also print the first sorted value and last sorted value, 
+            // and every thousandth value in between.
+
+            // First value
+            System.out.println("First sorted value: ");  
+            System.out.println("Volume: " + shapes[0].getVolume());  
+            System.out.println("Height: " + shapes[0].getHeight());  
+            System.out.println("BaseArea: " + shapes[0].getBaseArea());  
+         
+            // Last value
+            System.out.println("Last sorted value: ");
+            System.out.println("Volume: " + shapes[shapes.length-1].getVolume());
+            System.out.println("Height: " + shapes[shapes.length-1].getHeight());  
+            System.out.println("BaseArea: " + shapes[shapes.length-1].getBaseArea());  
+         
+            // every thousandth values
+            for(int i = 1; i < shapes.length; i++) {
+            	if(i%1000==0) {
+            		System.out.println(i + " value: ");
+            		System.out.println("Volume: " + shapes[i].getVolume());
+            		System.out.println("Height: " + shapes[i].getHeight());  
+            		System.out.println("BaseArea: " + shapes[i].getBaseArea());      		 
+            	}
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Error creating output file: " + e.getMessage());
+            return;
+        }     
+             
 
 	}
-
 }

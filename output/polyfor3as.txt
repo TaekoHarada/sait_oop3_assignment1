@@ -1,0 +1,4 @@
+------------------------
+Start Sorting: 14:41:02.744923
+Type: a
+Algorithm: s
