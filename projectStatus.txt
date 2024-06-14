@@ -1,0 +1,5 @@
+The completeness of the assignment (as a percentage) and a list of known deficiencies and/or missing functionalities.
+
+The completeness: 100%
+
+deficiencies and missing functionalities: 0

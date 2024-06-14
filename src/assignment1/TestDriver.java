@@ -9,11 +9,38 @@ import java.time.Duration;
 import shapes.*;
 //import assignment1.Utility;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+/**
+* TestDriver class is a test driver.
+*/
 public class TestDriver {
 
+	/**
+	 * The main method for the application. It reads input arguments for file name,
+	 * sort type, and sort algorithm, processes a file containing 3D shapes, sorts
+	 * the shapes based on sort type and sort algorithm, and outputs the sorted result to
+	 * a log files in 'output' folder.
+	 *
+	 * <p>Expected command-line arguments:</p>
+	 * <ul>
+	 *   <li><code>-f&lt;fileName&gt;</code>: specifies the file name of the input data.</li>
+	 *   <li><code>-t&lt;sortType&gt;</code>: specifies the type of sorting (e.g., by volume, height).</li>
+	 *   <li><code>-s&lt;sortAlgorithm&gt;</code>: specifies the sorting algorithm to use.</li>
+	 * </ul>
+	 *
+	 * <p>The input file should contain data in the following format:</p>
+	 * <pre>
+	 *     numberOfShapes shapeType1 height1 baseArea1 shapeType2 height2 baseArea2 ...
+	 * </pre>
+	 *
+	 * <p>The output file will be named based on the input file name, sort type, and sort algorithm.
+	 * (e.g. 'polyfor1aq.txt' input file name: polyfor1, sort type: a, sort algorithm: q)</p>
+	 *
+	 * @param args the command line arguments for specifying the input file, sort type, and sort algorithm.
+	 */
 	public static void main(String[] args) {
 		
 
@@ -85,7 +112,12 @@ public class TestDriver {
         int dotIndex = fileName.lastIndexOf('.');
         int slashIndex = fileName.lastIndexOf('/');
 
-        String outputFileName = "output/" + fileName.substring(slashIndex+1, dotIndex) + sortType + sortAlgorithm + ".txt";
+        // The directory for log files
+        String outputDir = "output";
+        // Create output directory if it does not exist
+        new File(outputDir).mkdirs(); 
+
+        String outputFileName = outputDir + "/" + fileName.substring(slashIndex+1, dotIndex) + sortType + sortAlgorithm + ".txt";
         System.out.println("outputFileName: "+ outputFileName);
 
         // Output the result to a file
