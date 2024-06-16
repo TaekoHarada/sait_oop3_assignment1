@@ -1,7 +1,78 @@
-Description about "Heap Sort"
+"Heap Sort" Algorithm
 
-complexity analysis.
+<< What is Heap Sort? >>
 
-the steps of the algorithm in pseudocode, with the number of operations performed in each step. 
+Heap Sort is an efficient sort algorithm using a binary heap data structure, a type of binary tree.
 
-Make sure to write this in your own words and DO NOT copy or rephrase from another source.
+Here is the step for sorting.
+
+	1. Create a binary heap data structure from input data.
+	2. Swap the largest node with the root node. (heapify)
+	3. Swap the root node(the largest node) with the last non sorted element of array. 
+	5. Repeat 2-3 until all element sorted. 
+ 
+
+<< Relationship between an array and a tree >>
+
+Before the pseudocode, this is the example about how to think an array as a tree structure.
+
+Example array : [4,7,2,9,6,1]
+
+The example array to a Tree structure (binary heap data structure):
+
+	4
+   / \
+  7   2
+ / \   \
+9   6   1
+
+if 4's index is i
+then 7's (4's left node) index is '2 * i + 1'
+and 2's (4's right node) index is '2 * i + 2'
+
+
+
+<< Pseudocode >>
+
+	heapSort(array arr){
+		int n = arr.length()
+		
+		for (int i = n / 2 - 1; i >= 0; i--) {
+	        heapify(arr, n, i);
+	    }
+	    
+	    for (int i = n - 1; i >= 0; i--) {
+	    
+	    	Swap arr[0] and arr[i];
+	        
+	        heapify(array, i, 0);
+	    }
+		
+	}
+
+	heapify(array arr, int n, int i){
+		int largest = i;
+	    int left = 2 * i + 1;  // left node of larget node
+	    int right = 2 * i + 2;   // right node of larget node
+	    
+	    if (left > largest and left is exist) {
+	        largest = left;
+	    }
+
+	    if (right > largest and right is exist) {
+	        largest = right;
+	    }
+	    
+	    // if the largest is not the root node
+        if (largest != i) {
+        	Swap arr[i] and arr[largest];
+        	heapify(arr, n, largest);   // Iterate heapify until the largest become the root node
+        }
+		
+	}
+
+
+<< Complexity analysis >> 
+
+Building the Heap: O(n) 
+Extracting Elements: O(nlogn)
